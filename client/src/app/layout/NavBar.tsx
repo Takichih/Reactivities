@@ -1,10 +1,10 @@
-import { AppBar, Box, Button, Container, Toolbar, Typography, ListItem } from "@mui/material";
+import { AppBar, Box, Button, Container, Toolbar, Typography, ListItem} from "@mui/material";
 import Group from "@mui/icons-material/Group";
+import { NavLink } from "react-router";
+import MenuItemLink from "../shared/components/MenuItemLink";
 
-type Props = {
-  openForm : () => void;
-}
-export default function NavBar({openForm}: Props) {
+
+export default function NavBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{
@@ -14,28 +14,26 @@ export default function NavBar({openForm}: Props) {
           <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
             
             <Box>
-              <ListItem sx={{ display: 'flex', gap: 2 }}>
+              <ListItem component={NavLink} to='/' sx={{ display: 'flex', gap: 2 }}>
                 <Group fontSize="large" />
                 <Typography variant="h4">Reactivities</Typography>
               </ListItem>
             </Box>
 
             <Box sx={{ display: "flex" }}>
-              <Button color="inherit" sx={{ fontSize: '1.2rem', textTransform: 'uppercase', fontWeight: 'bold' }}>
+              <MenuItemLink to='/activities' >
                 Activities
-              </Button>
-              <Button color="inherit" sx={{ fontSize: '1.2rem', textTransform: 'uppercase', fontWeight: 'bold' }}>
-                About
-              </Button>
-              <Button color="inherit" sx={{ fontSize: '1.2rem', textTransform: 'uppercase', fontWeight: 'bold' }}>
-                Context
-              </Button>
+              </MenuItemLink>
+              <MenuItemLink to='/createActivity'>
+                Create Activity
+              </MenuItemLink>
+
             </Box>
 
-            <Button onClick={openForm} size="large" variant="contained" color="warning">
-              Create activity
+            <Button >
+              User menu
             </Button>
-
+            
           </Toolbar>
         </Container>
       </AppBar>
