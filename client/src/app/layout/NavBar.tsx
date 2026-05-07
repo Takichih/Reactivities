@@ -16,7 +16,7 @@ export default function NavBar() {
             <Box>
               <ListItem component={NavLink} to='/' sx={{ display: 'flex', gap: 2 }}>
                 <Group fontSize="large" />
-                <Typography variant="h4">Reactivities</Typography>
+                <Typography variant="h4" sx={{fontWeight:'bold'}}>Reactivities</Typography>
               </ListItem>
             </Box>
 
