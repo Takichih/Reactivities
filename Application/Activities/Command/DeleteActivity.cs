@@ -1,5 +1,6 @@
 using System;
 using System.Reflection.Metadata;
+using Application.Core;
 using Domain;
 using MediatR;
 using Persistance;
@@ -8,19 +9,23 @@ namespace Application.Activities.Command;
 
 public class DeleteActivity
 {
-    public class Delete : IRequest
+    public class Command : IRequest<Result<Unit>>
     {
         public required string Id { get; set; }
     }
-    public class Handler(AppDbContext context) : IRequestHandler<Delete>
+    public class Handler(AppDbContext context) : IRequestHandler<Command, Result<Unit>>
     {
-        public async Task Handle(Delete request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var act = await context.activities.FindAsync(request.Id, cancellationToken) 
-            ?? throw new Exception("Not found");
+            var activity = await context.activities
+            .FindAsync([request.Id], cancellationToken);
 
-            context.Remove(act);
-            await context.SaveChangesAsync(cancellationToken);
+            if (activity == null) return await Task.FromResult(Result<Unit>.Failure("Activity not found", 404));
+
+            context.Remove(activity);
+            var result = await context.SaveChangesAsync(cancellationToken) > 0;
+            if (!result) return await Task.FromResult(Result<Unit>.Failure("Failed to delete the activity", 404));
+            return await Task.FromResult(Result<Unit>.Success(Unit.Value));
         }
     }
 }
